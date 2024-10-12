@@ -49,7 +49,7 @@ def add_custom_css():
                 
     /* Professional gradient background */
     .stApp {
-        background: linear-gradient(135deg,#dadada, #ffffff);
+        background: linear-gradient(135deg,#a9a9a9, #ffffff);
         # animation: gradientAnimation 4s ease infinite;
         color: #fff;
         font-family: 'Arial', sans-serif;
@@ -73,14 +73,17 @@ def add_custom_css():
 
     /* Team Fin Heading */
     h1 {
-        color: #3498db;
-        font-size: 3rem;
+        color: #1f78d1;
+        font-size: 5rem;
         font-weight: bold;
         text-align: center;
+        text-transform: uppercase;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         margin-top: 0;
         margin-bottom: 0.5rem;
         letter-spacing: 1px;
         text-transform: uppercase;
+                
     }
     
     .st-emotion-cache-1pbsqtx{
@@ -95,6 +98,7 @@ def add_custom_css():
         margin-top: 0;
         margin-bottom: 1rem;
         letter-spacing: 0.5px;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
     }
                 
     .st-emotion-cache-1erivf3{
@@ -117,7 +121,12 @@ def add_custom_css():
     }
 
     .st-emotion-cache-6qob1r{
-        background-color: #cfcdca;
+        background-color: #ffffff;
+    }
+                
+    .st-emotion-cache-1rsyhoq p {
+    word-break: break-word;
+    color: #000000;
     }
 
     .st-emotion-cache-jdyw56.en6cib60{
@@ -125,11 +134,11 @@ def add_custom_css():
     }
     .st-emotion-cache-j13cuw.en6cib64{
     color: black;
-    }
+    }
     
     .st-emotion-cache-1amcpu.ex0cdmw0{
     color:black;
-    }
+    }
 
     /* File upload area */
     .css-1cpxqw2 {
@@ -243,6 +252,9 @@ def add_custom_css():
         background-color: white;
         box-shadow: 5px 5px 15px rgba(16, 16, 16, 0.3);
     }
+    
+    .st-emotion-cache-1uixxvy{
+        color: black;}
                 
     /* Info boxes */
     .info-boxes {
@@ -333,21 +345,6 @@ def add_info_boxes():
         <div class="info-box">
             <h3>Quick Results</h3>
             <p>Get instant feedback on potential forgeries with our real-time processing system.</p>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-def add_image_comparison():
-    st.markdown("""
-    <div class="image-comparison">
-        <div class="image-container">
-            <img src="/api/placeholder/400/300" alt="Original Image">
-            <p>Original Image</p>
-        </div>
-        <div class="vs-icon">VS</div>
-        <div class="image-container">
-            <img src="/api/placeholder/400/300" alt="Forged Image">
-            <p>Potential Forgery</p>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -583,18 +580,10 @@ display_logos()
 uploaded_file = st.file_uploader("Upload an image for forgery detection", type=["jpg", "jpeg", "png"])
 
 with st.sidebar:
-    st.markdown("""
-<style>
-    [data-testid=stSidebar] {
-        background-color: #2c3e50;
-    }
-</style>
-""", unsafe_allow_html=True)
     add_forgery_icons()
     st.write("Welcome to our state-of-the-art Forgery Detection system. Upload an image to check for potential manipulations.")
     add_info_boxes()
 
-add_image_comparison()
 
 model = load_model()
 
@@ -606,16 +595,9 @@ if uploaded_file is not None:
     with open(os.path.join(data_path, uploaded_file.name), "wb") as f:
         f.write(uploaded_file.getbuffer())
     image = Image.open(uploaded_file)
-    # st.image(image, caption="Uploaded Image", use_column_width=True)
-
-    # save the uploaded image
-    # image = cv2.imread(os.path.join(data_path, uploaded_file.name))
-    # st.image(image, caption="Uploaded Image", use_column_width=True)
     
     # save the uploaded image
     path = os.path.join(data_path, uploaded_file.name)
-    # image = Image.fromarray(image).convert("L")
-    # image.save(path,"JPEG",qtables={0:new_qtb})
 
     with st.spinner("Analyzing for potential forgery..."):
         processed_image = process_image_with_model(path, model)
@@ -627,6 +609,5 @@ if uploaded_file is not None:
     processed_image_rgb = cv2.cvtColor(processed_image, cv2.COLOR_BGR2RGB)
 
     st.image(processed_image_rgb, caption="Analyzed Image", use_column_width=True)
-    st.download_button("Download Analyzed Image", data=Image.fromarray(processed_image_rgb).tobytes(), file_name="analyzed_image.png", mime="image/png")
 
 st.markdown('</div>', unsafe_allow_html=True)
