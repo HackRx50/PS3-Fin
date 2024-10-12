@@ -252,27 +252,23 @@ def process_image_with_model(img_path, model):
 
     # read the mask and put it on the original image
     mask = cv2.imread("mask.png", 0)
-
-    # find contours
-    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    min_mask_value = 0.3*256
+    _, filtered_mask = cv2.threshold(mask, min_mask_value, 255, cv2.THRESH_BINARY)
+    contours, _ = cv2.findContours(filtered_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    min_area_threshold = 100
+    valid_contours = []
     for contour in contours:
-        x, y, w, h = cv2.boundingRect(contour)
-        cv2.rectangle(imgs_ori, (x, y), (x+w, y+h), (0, 0, 255), 2)
-    cv2.imwrite("temp_bbox.jpg", imgs_ori)
-    final = cv2.imread("temp_bbox.jpg")
-    # return the follwoing json 
-#     {
-#     'is_forged': True,
-#     'location': [
-#         ['top_x', 'top_y', 'width', 'height'],
-#         ['top_x', 'top_y', 'width', 'height']
-#     ]
-# }
+        area = cv2.contourArea(contour)
+        if area > min_area_threshold:
+            valid_contours.append(contour)
+            x, y, w, h = cv2.boundingRect(contour)
+            cv2.rectangle(imgs_ori, (x, y), (x + w, y + h), (0, 0, 255), 2)
+
     is_forged = False
     boxes = []
-    if len(contours) > 0:
+    if len(valid_contours) > 0:
         is_forged = True
-        for contour in contours:
+        for contour in valid_contours:
             x, y, w, h = cv2.boundingRect(contour)
             boxes.append([x, y, w, h])
 
