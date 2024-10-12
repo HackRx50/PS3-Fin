@@ -548,14 +548,25 @@ def process_image_with_model(img_path, model):
     _, filtered_mask = cv2.threshold(mask, min_mask_value, 255, cv2.THRESH_BINARY)
     contours, _ = cv2.findContours(filtered_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     min_area_threshold = 100
+    valid_contours = []
     for contour in contours:
         area = cv2.contourArea(contour)
         if area > min_area_threshold:
+            valid_contours.append(contour)
             x, y, w, h = cv2.boundingRect(contour)
             cv2.rectangle(imgs_ori, (x, y), (x + w, y + h), (0, 0, 255), 2)
     cv2.imwrite("temp_bbox.jpg", imgs_ori)
     final = cv2.imread("temp_bbox.jpg")
-    return final
+
+    is_forged = False
+    boxes = []
+    if len(valid_contours) > 0:
+        is_forged = True
+        for contour in valid_contours:
+            x, y, w, h = cv2.boundingRect(contour)
+            boxes.append([x, y, w, h])
+
+    return final, is_forged, boxes
 
 add_custom_css()
 add_background_detective()
@@ -593,7 +604,7 @@ if uploaded_file is not None:
     path = os.path.join(data_path, uploaded_file.name)
 
     with st.spinner("Analyzing for potential forgery..."):
-        processed_image = process_image_with_model(path, model)
+        processed_image, is_forged, boxes = process_image_with_model(path, model)
 
     # save the analyzed image
     processed_image_path = os.path.join(result_path, uploaded_file.name)
@@ -602,5 +613,7 @@ if uploaded_file is not None:
     processed_image_rgb = cv2.cvtColor(processed_image, cv2.COLOR_BGR2RGB)
 
     st.image(processed_image_rgb, caption="Analyzed Image", use_column_width=True)
+
+    ## show is_forged and boxes
 
 st.markdown('</div>', unsafe_allow_html=True)
