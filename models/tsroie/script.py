@@ -463,13 +463,16 @@ def process_image_with_model(img_path, model):
 
     # read the mask and put it on the original image
     mask = cv2.imread("mask.png", 0)
-
-    # find contours
-    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    min_mask_value = 126
+    _, filtered_mask = cv2.threshold(mask, min_mask_value, 255, cv2.THRESH_BINARY)
+    contours, _ = cv2.findContours(filtered_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    min_area_threshold = 100
     for contour in contours:
-        x, y, w, h = cv2.boundingRect(contour)
-        cv2.rectangle(imgs_ori, (x, y), (x+w, y+h), (0, 0, 255), 2)
-    cv2.imwrite("temp_bbox.jpg", imgs_ori)
+        area = cv2.contourArea(contour)
+        if area > min_area_threshold:
+            x, y, w, h = cv2.boundingRect(contour)
+            cv2.rectangle(imgs_ori, (x, y), (x + w, y + h), (0, 0, 255), 2)
+        cv2.imwrite("temp_bbox.jpg", imgs_ori)
     final = cv2.imread("temp_bbox.jpg")
     return final
 
