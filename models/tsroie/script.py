@@ -36,13 +36,14 @@ def add_custom_css():
     <style>
     /* Professional gradient background */
     .stApp {
-        background: linear-gradient(135deg, #1c2841, #2c3e50);
+        background: linear-gradient(135deg, #ffffff, #ffffff);
         color: #fff;
         font-family: 'Arial', sans-serif;
     }
 
     /* Main container */
     .main-container {
+                color:black;
         max-width: 1200px;
         margin: 0 auto;
         padding: 2rem;
@@ -51,7 +52,9 @@ def add_custom_css():
     }
     
                 [data-testid="stHeader"] {
-                background-color: #2c3e50;}
+                background-color: #ffffff;
+                box-shadow: 5px 5px 15px rgba(16, 16, 16, 0.3);          
+}
 
     /* Team Fin Heading */
     h1 {
@@ -64,16 +67,33 @@ def add_custom_css():
         letter-spacing: 1px;
         text-transform: uppercase;
     }
+    
+    .st-emotion-cache-1pbsqtx{
+                color: black;}
 
     /* Forgery Detection Heading */
     h2 {
-        color: #e74c3c;
+        color: #c3790a;
         font-size: 2rem;
         font-weight: bold;
         text-align: center;
         margin-top: 0;
         margin-bottom: 1rem;
         letter-spacing: 0.5px;
+    }
+                
+    .st-emotion-cache-1erivf3{
+        background: white; 
+        color: black; 
+        box-shadow: 5px 5px 15px rgba(16, 16, 16, 0.3);          
+    }
+
+    .st-emotion-cache-7oyrr6{
+        color: black;
+    }
+
+    .st-emotion-cache-15hul6a{
+        color: white;            
     }
 
     /* File upload area */
@@ -106,6 +126,10 @@ def add_custom_css():
     .stButton button:hover {
         background-color: #27ae60;
     }
+    
+    .stAppDeployButton{
+    color: black;            
+    }
 
     /* Logos container */
     .logo-container {
@@ -113,9 +137,10 @@ def add_custom_css():
         justify-content: space-between;
         align-items: center;
         padding: 1rem;
-        background: rgba(255, 255, 255, 0.1);
+        background: rgb(253, 253, 253);
         border-radius: 10px;
         margin-bottom: 1rem;
+        box-shadow: 5px 5px 15px rgba(16, 16, 16, 0.3);
     }
 
     .logo {
@@ -155,6 +180,10 @@ def add_custom_css():
         align-items: center;
         font-size: 2rem;
     }
+                
+    .st-emotion-cache-uef7qa p{
+    color: black;
+                }
 
     /* Info boxes */
     .info-boxes {
