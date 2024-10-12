@@ -1,0 +1,13 @@
+pks/
+pths/
+results/
+test/
+sroie_pred/
+test_images/
+*.pk
+mask.png
+temp_bbox.jpg
+cvtlmdb.py
+dataloader.py
+metrics.py
+vizlmdb.py
