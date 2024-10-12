@@ -34,11 +34,26 @@ new_qtb = np.array([[ 2,  1,  1,  2,  2,  4,  5,  6],[ 1,  1,  1,  2,  3,  6,  6
 def add_custom_css():
     st.markdown("""
     <style>
+    /* Professional gradient background with animation */
+    @keyframes gradientAnimation {
+        # 0% {
+        #     background: linear-gradient(135deg, #ffffff, #dadada);
+        # }
+        # 50% {
+        #     background: linear-gradient(135deg, #dadada, #ffffff);
+        # }
+        100% {
+            background: linear-gradient(135deg, #dadada, #ffffff);
+        }
+    }
+                
     /* Professional gradient background */
     .stApp {
-        background: linear-gradient(135deg, #ffffff, #e3a36f);
+        background: linear-gradient(135deg,#dadada, #ffffff);
+        # animation: gradientAnimation 4s ease infinite;
         color: #fff;
         font-family: 'Arial', sans-serif;
+        transition: background 0.5s ease-in-out;
     }
 
     /* Main container */
@@ -87,6 +102,11 @@ def add_custom_css():
         color: black; 
         box-shadow: 5px 5px 15px rgba(16, 16, 16, 0.3);          
     }
+                
+    .st-emotion-cache-mnu3yk{
+        background-color: #3498db;
+        color: white;
+    }
 
     .st-emotion-cache-7oyrr6{
         color: black;
@@ -95,6 +115,21 @@ def add_custom_css():
     .st-emotion-cache-15hul6a{
         color: white;            
     }
+
+    .st-emotion-cache-6qob1r{
+        background-color: #cfcdca;
+    }
+
+    .st-emotion-cache-jdyw56.en6cib60{
+    color: black;
+    }
+    .st-emotion-cache-j13cuw.en6cib64{
+    color: black;
+    }
+    
+    .st-emotion-cache-1amcpu.ex0cdmw0{
+    color:black;
+    }
 
     /* File upload area */
     .css-1cpxqw2 {
@@ -173,31 +208,58 @@ def add_custom_css():
     .forgery-icon {
         width: 80px;
         height: 80px;
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: rgb(255, 255, 255);
         border-radius: 50%;
         display: flex;
         justify-content: center;
         align-items: center;
         font-size: 2rem;
+        box-shadow: 5px 5px 15px rgba(16, 16, 16, 0.3);
+    }
+                
+    .st-emotion-cache-1gwvy71{
+        background-color: white;            
+                
+    }
+                
+    .st-emotion-cache-nok2kl p {
+        color: black;            
     }
                 
     .st-emotion-cache-uef7qa p{
     color: black;
-                }
+    }
+                
+    .st-emotion-cache-nok2kl p{
+    color: black;
+    }
+                
+    .st-emotion-cache-1f3w014{
+        background-color: #3498db;
+        border-radius: 15px;
+    }
 
+    .st-emotion-cache-kgpedg.eczjsme9 {
+        background-color: white;
+        box-shadow: 5px 5px 15px rgba(16, 16, 16, 0.3);
+    }
+                
     /* Info boxes */
     .info-boxes {
+        # background-color: white;
         display: flex;
         justify-content: space-between;
         margin: 2rem 0;
+        
     }
 
     .info-box {
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: rgb(255, 255, 255);
         border-radius: 10px;
         padding: 1rem;
         width: 30%;
         text-align: center;
+        box-shadow: 5px 5px 15px rgba(16, 16, 16, 0.3);
     }
 
     .info-box h3 {
@@ -510,7 +572,7 @@ add_background_detective()
 
 st.markdown('<div class="main-container">', unsafe_allow_html=True)
 
-# Move headings to the top
+# # Move headings to the top
 st.markdown("<h1>Team Fin</h1>", unsafe_allow_html=True)
 st.markdown("<h2>Forgery Detection</h2>", unsafe_allow_html=True)
 
@@ -532,7 +594,7 @@ with st.sidebar:
     st.write("Welcome to our state-of-the-art Forgery Detection system. Upload an image to check for potential manipulations.")
     add_info_boxes()
 
-# add_image_comparison()
+add_image_comparison()
 
 model = load_model()
 
@@ -565,6 +627,6 @@ if uploaded_file is not None:
     processed_image_rgb = cv2.cvtColor(processed_image, cv2.COLOR_BGR2RGB)
 
     st.image(processed_image_rgb, caption="Analyzed Image", use_column_width=True)
-    # st.download_button("Download Analyzed Image", data=Image.fromarray(processed_image_rgb).tobytes(), file_name="analyzed_image.png", mime="image/png")
+    st.download_button("Download Analyzed Image", data=Image.fromarray(processed_image_rgb).tobytes(), file_name="analyzed_image.png", mime="image/png")
 
 st.markdown('</div>', unsafe_allow_html=True)
