@@ -260,7 +260,23 @@ def process_image_with_model(img_path, model):
         cv2.rectangle(imgs_ori, (x, y), (x+w, y+h), (0, 0, 255), 2)
     cv2.imwrite("temp_bbox.jpg", imgs_ori)
     final = cv2.imread("temp_bbox.jpg")
-    return contours[0]
+    # return the follwoing json 
+#     {
+#     'is_forged': True,
+#     'location': [
+#         ['top_x', 'top_y', 'width', 'height'],
+#         ['top_x', 'top_y', 'width', 'height']
+#     ]
+# }
+    is_forged = False
+    boxes = []
+    if len(contours) > 0:
+        is_forged = True
+        for contour in contours:
+            x, y, w, h = cv2.boundingRect(contour)
+            boxes.append([x, y, w, h])
+
+    return jsonify({'is_forged': is_forged, 'location': boxes})
 
   
 @app.route('/predict/', methods=['GET'])
@@ -289,7 +305,7 @@ def predict():
         path = temp_file_path
         
         with st.spinner("Analyzing for potential forgery..."):
-            boxes = process_image_with_model(path, model)
+            op = process_image_with_model(path, model)
 
         # # save the analyzed image
         # processed_image_path = os.path.join(result_path, file.filename)
@@ -300,7 +316,7 @@ def predict():
         # prediction = processed_image_rgb.tolist()
 
         
-        return jsonify({'boxes': boxes.tolist()[:2]})
+        return op
   
 
 
