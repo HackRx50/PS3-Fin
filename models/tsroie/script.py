@@ -50,7 +50,7 @@ def add_custom_css():
                 
     /* Professional gradient background */
     .stApp {
-        background: linear-gradient(135deg,#dadada, #ffffff);
+        background: linear-gradient(135deg,#a9a9a9, #ffffff);
         # animation: gradientAnimation 4s ease infinite;
         color: #fff;
         font-family: 'Arial', sans-serif;
@@ -74,14 +74,17 @@ def add_custom_css():
 
     /* Team Fin Heading */
     h1 {
-        color: #3498db;
-        font-size: 3rem;
+        color: #1f78d1;
+        font-size: 5rem;
         font-weight: bold;
         text-align: center;
+        text-transform: uppercase;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         margin-top: 0;
         margin-bottom: 0.5rem;
         letter-spacing: 1px;
         text-transform: uppercase;
+                
     }
     
     .st-emotion-cache-1pbsqtx{
@@ -96,6 +99,7 @@ def add_custom_css():
         margin-top: 0;
         margin-bottom: 1rem;
         letter-spacing: 0.5px;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
     }
                 
     .st-emotion-cache-1erivf3{
@@ -249,6 +253,9 @@ def add_custom_css():
         background-color: white;
         box-shadow: 5px 5px 15px rgba(16, 16, 16, 0.3);
     }
+    
+    .st-emotion-cache-1uixxvy{
+        color: black;}
                 
     /* Info boxes */
     .info-boxes {
