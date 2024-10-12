@@ -36,7 +36,7 @@ def add_custom_css():
     <style>
     /* Professional gradient background */
     .stApp {
-        background: linear-gradient(135deg, #ffffff, #ffffff);
+        background: linear-gradient(135deg, #ffffff, #e3a36f);
         color: #fff;
         font-family: 'Arial', sans-serif;
     }
