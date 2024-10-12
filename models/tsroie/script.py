@@ -600,16 +600,22 @@ def process_image_with_model(img_path, model):
             x, y, w, h = cv2.boundingRect(contour)
             boxes.append([x, y, w, h])
     cat = random.choice(["Copy/Move", "Splice","Copy/Move", "Splice","Copy/Move", "Splice", "Generation"])
+    if not is_forged:
+        cat = "Authentic"
     return [final, is_forged, boxes, cat]
 
 def display_forgery_info(is_forged, cat, boxes):
     # Display the forgery detection result
+    try:
+        box_string = f"(X1: {boxes[0]}, Y1: {boxes[1]}) - (X2: {boxes[2]}, Y2: {boxes[3]})"
+    except:
+        box_string = "N/A"
     st.markdown(f"""
         <div class="forgery-info">
             <h3>Forgery Detection Result</h3>
             <p><strong>Is Forged:</strong> {is_forged}</p>
             <p><strong>Type of Forgery:</strong> {cat}</p>
-            <p><strong>Bounding Box:</strong> (X1: {boxes['x']}, Y1: {boxes['y']}) - (X2: {boxes['w']}, Y2: {boxes['h']})</p>
+            <p><strong>Bounding Box:</strong> {box_string}</p>
         </div>
     """, unsafe_allow_html=True)
 
