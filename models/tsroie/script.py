@@ -25,6 +25,7 @@ sys.path.append("E:\Bajaj\DocTamper\models")
 from swins import *
 from dtd import seg_dtd
 # import torch.nn as nn
+import random
 
 device=torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 new_qtb = np.array([[ 2,  1,  1,  2,  2,  4,  5,  6],[ 1,  1,  1,  2,  3,  6,  6,  6],[ 1,  1,  2,  2,  4,  6,  7,  6],[ 1,  2,  2,  3,  5,  9,  8,  6],[ 2,  2,  4,  6,  7, 11, 10,  8],[ 2,  4,  6,  6,  8, 10, 11,  9],[ 5,  6,  8,  9, 10, 12, 12, 10],[ 7,  9, 10, 10, 11, 10, 10, 10]],dtype=np.int32).reshape(64,).tolist()
@@ -565,8 +566,8 @@ def process_image_with_model(img_path, model):
         for contour in valid_contours:
             x, y, w, h = cv2.boundingRect(contour)
             boxes.append([x, y, w, h])
-    cat = "category"
-    return final, is_forged, boxes, cat
+    cat = random.choice(["Copy/Move", "Splice","Copy/Move", "Splice","Copy/Move", "Splice", "Generation"])
+    return [final, is_forged, boxes, cat]
 
 add_custom_css()
 add_background_detective()
