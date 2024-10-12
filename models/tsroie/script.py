@@ -295,6 +295,32 @@ def add_custom_css():
         font-size: 2rem;
         color: #e74c3c;
     }
+
+    /* Forgery Detection Info Section */
+    .forgery-info {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 1.5rem;
+        box-shadow: 5px 5px 15px rgba(16, 16, 16, 0.3);
+        margin-top: 2rem;
+        color: black;
+    }
+
+    .forgery-info h3 {
+        color: #c3790a;
+        margin-bottom: 1rem;
+    }
+    
+    .forgery-info p {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .forgery-info strong {
+        color: #3498db;
+    }
+
+
     </style>
     """, unsafe_allow_html=True)
 
@@ -568,6 +594,17 @@ def process_image_with_model(img_path, model):
     cat = "category"
     return final, is_forged, boxes, cat
 
+def display_forgery_info(is_forged, cat, boxes):
+    # Display the forgery detection result
+    st.markdown(f"""
+        <div class="forgery-info">
+            <h3>Forgery Detection Result</h3>
+            <p><strong>Is Forged:</strong> {is_forged}</p>
+            <p><strong>Type of Forgery:</strong> {cat}</p>
+            <p><strong>Bounding Box:</strong> (X1: {boxes['x']}, Y1: {boxes['y']}) - (X2: {boxes['w']}, Y2: {boxes['h']})</p>
+        </div>
+    """, unsafe_allow_html=True)
+
 add_custom_css()
 add_background_detective()
 
@@ -615,5 +652,9 @@ if uploaded_file is not None:
     st.image(processed_image_rgb, caption="Analyzed Image", use_column_width=True)
 
     ## show is_forged, cat and boxes
+    # is_forged = True
+    # cat = "Text Alteration"
+    # boxes = {"x1": 100, "y1": 50, "x2": 400, "y2": 200}
+    display_forgery_info(is_forged, cat, boxes)
 
 st.markdown('</div>', unsafe_allow_html=True)
