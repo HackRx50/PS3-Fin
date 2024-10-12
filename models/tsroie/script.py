@@ -565,8 +565,8 @@ def process_image_with_model(img_path, model):
         for contour in valid_contours:
             x, y, w, h = cv2.boundingRect(contour)
             boxes.append([x, y, w, h])
-
-    return final, is_forged, boxes
+    cat = "category"
+    return final, is_forged, boxes, cat
 
 add_custom_css()
 add_background_detective()
@@ -604,7 +604,7 @@ if uploaded_file is not None:
     path = os.path.join(data_path, uploaded_file.name)
 
     with st.spinner("Analyzing for potential forgery..."):
-        processed_image, is_forged, boxes = process_image_with_model(path, model)
+        processed_image, is_forged, boxes, cat = process_image_with_model(path, model)
 
     # save the analyzed image
     processed_image_path = os.path.join(result_path, uploaded_file.name)
@@ -614,6 +614,6 @@ if uploaded_file is not None:
 
     st.image(processed_image_rgb, caption="Analyzed Image", use_column_width=True)
 
-    ## show is_forged and boxes
+    ## show is_forged, cat and boxes
 
 st.markdown('</div>', unsafe_allow_html=True)
