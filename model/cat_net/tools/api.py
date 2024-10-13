@@ -102,6 +102,14 @@ def predict():
     if file:
         input_folder = Path("input")
         input_folder.mkdir(exist_ok=True)
+        # delete all files in the input folder
+        for filename in os.listdir(input_folder):
+            file_path = os.path.join(input_folder, filename)
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+            except Exception as e:
+                print(e)
         file.save(os.path.join(input_folder, file.filename))
 
     cudnn.benchmark = config.CUDNN.BENCHMARK
@@ -176,78 +184,74 @@ def predict():
             filename = os.path.splitext(get_next_filename(index))[0] + ".png"
             filepath = dataset_paths['SAVE_PRED'] / filename
 
-            # plot
-            try:
-                width = pred.shape[1]  # in pixels
-                fig = plt.figure(frameon=False)
-                dpi = 40  # fig.dpi
-                fig.set_size_inches(width / dpi, ((width * pred.shape[0])/pred.shape[1]) / dpi)
-                plt.imshow(pred, cmap='gray', vmin=0, vmax=1)
-                plt.axis('off')
-                plt.savefig(filepath, bbox_inches='tight', transparent=True, pad_inches=0)
-                plt.close(fig)
 
-                image = cv2.imread(os.path.join(input_folder, file.filename))
-                # Use the function to find bounding boxes
-                mask = cv2.imread(str(filepath))
-                # print(mask.shape)
-                # print(image.shape)
-                # resize original image to match mask
-                mask = cv2.resize(mask, (image.shape[1], image.shape[0]))
-                print(mask.shape)
-                print(image.shape)
+            width = pred.shape[1]  # in pixels
+            fig = plt.figure(frameon=False)
+            dpi = 40  # fig.dpi
+            fig.set_size_inches(width / dpi, ((width * pred.shape[0])/pred.shape[1]) / dpi)
+            plt.imshow(pred, cmap='gray', vmin=0, vmax=1)
+            plt.axis('off')
+            plt.savefig(filepath, bbox_inches='tight', transparent=True, pad_inches=0)
+            plt.close(fig)
 
-                # binarise the mask
-                mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
+            image = cv2.imread(os.path.join(input_folder, file.filename))
+            # Use the function to find bounding boxes
+            mask = cv2.imread(str(filepath))
+            # print(mask.shape)
+            # print(image.shape)
+            # resize original image to match mask
+            mask = cv2.resize(mask, (image.shape[1], image.shape[0]))
+            print(mask.shape)
+            print(image.shape)
 
-                # load the mask and create rectangle bounding boxes
-                min_mask_value = 0.02 * 256
-                _, filtered_mask = cv2.threshold(mask, min_mask_value, 255, cv2.THRESH_BINARY)
-                contours, _ = cv2.findContours(filtered_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-                min_area_threshold = 0.01 * mask.shape[0] * mask.shape[1]
-                max_area_threshold = 0.1 * mask.shape[0] * mask.shape[1]
-                valid_contours = []
-                # image = cv2.imread("input/sample_9.jpg")
-                for contour in contours:
-                    area = cv2.contourArea(contour)
-                    if area > min_area_threshold and area < max_area_threshold:
-                        valid_contours.append(contour)
+            # binarise the mask
+            mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
 
-                # Remove boxes that are inside another box
-                def is_inside(inner, outer):
-                    x_inner, y_inner, w_inner, h_inner = cv2.boundingRect(inner)
-                    x_outer, y_outer, w_outer, h_outer = cv2.boundingRect(outer)
-                    return (x_inner >= x_outer and y_inner >= y_outer and
-                            x_inner + w_inner <= x_outer + w_outer and
-                            y_inner + h_inner <= y_outer + h_outer)
+            # load the mask and create rectangle bounding boxes
+            min_mask_value = 0.02 * 256
+            _, filtered_mask = cv2.threshold(mask, min_mask_value, 255, cv2.THRESH_BINARY)
+            contours, _ = cv2.findContours(filtered_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            min_area_threshold = 0.01 * mask.shape[0] * mask.shape[1]
+            max_area_threshold = 0.1 * mask.shape[0] * mask.shape[1]
+            valid_contours = []
+            # image = cv2.imread("input/sample_9.jpg")
+            for contour in contours:
+                area = cv2.contourArea(contour)
+                if area > min_area_threshold and area < max_area_threshold:
+                    valid_contours.append(contour)
 
-                filtered_contours = []
-                for i, contour in enumerate(valid_contours):
-                    if not any(is_inside(contour, other) for j, other in enumerate(valid_contours) if i != j):
-                        filtered_contours.append(contour)
+            # Remove boxes that are inside another box
+            def is_inside(inner, outer):
+                x_inner, y_inner, w_inner, h_inner = cv2.boundingRect(inner)
+                x_outer, y_outer, w_outer, h_outer = cv2.boundingRect(outer)
+                return (x_inner >= x_outer and y_inner >= y_outer and
+                        x_inner + w_inner <= x_outer + w_outer and
+                        y_inner + h_inner <= y_outer + h_outer)
 
+            filtered_contours = []
+            for i, contour in enumerate(valid_contours):
+                if not any(is_inside(contour, other) for j, other in enumerate(valid_contours) if i != j):
+                    filtered_contours.append(contour)
+
+            for contour in filtered_contours:
+                x, y, w, h = cv2.boundingRect(contour)
+                cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), 2)
+
+            cv2.imwrite(str(filepath).replace(".png", "_bbox.jpg"), image)
+
+            boxes = []
+            is_forged = False
+            if len(filtered_contours) > 0:
+                is_forged = True
                 for contour in filtered_contours:
                     x, y, w, h = cv2.boundingRect(contour)
-                    cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), 2)
+                    boxes.append([x, y, w, h])
 
-                cv2.imwrite(str(filepath).replace(".png", "_bbox.jpg"), image)
-
-            except:
-                print(f"Error occurred while saving output. ({get_next_filename(index)})")
-                return jsonify({'error': 'Error occurred while saving output.'})
-                is_forged = False
-    boxes = []
-    if len(filtered_contours) > 0:
-        is_forged = True
-        for contour in filtered_contours:
-            x, y, w, h = cv2.boundingRect(contour)
-            boxes.append([x, y, w, h])
-
-    cat = random.choice(["Copy/Move", "Splice","Copy/Move", "Splice","Copy/Move", "Splice", "Generation"])
-    
-    if not is_forged:
-        cat = "Authentic"
-    return jsonify({'is_forged': is_forged, 'bounding_box': boxes, 'type': cat})
+            cat = random.choice(["Copy/Move", "Splice","Copy/Move", "Splice","Copy/Move", "Splice", "Generation"])
+            
+            if not is_forged:
+                cat = "Authentic"
+            return jsonify({'is_forged': is_forged, 'bounding_box': boxes, 'type': cat})
 
 
 
