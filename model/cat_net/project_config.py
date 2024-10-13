@@ -1,8 +1,3 @@
-"""
- Created by Nisarg Bhavsar
- nisargbhavsar25@gmail.com
- 13/10/2024
-"""
 from pathlib import Path
 
 project_root = Path(__file__).parent

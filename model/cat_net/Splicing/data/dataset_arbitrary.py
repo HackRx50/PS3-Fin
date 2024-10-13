@@ -1,8 +1,3 @@
-"""
-Created by Myung-Joon Kwon
-mjkwon2021@gmail.com
-Sep 10, 2020
-"""
 import project_config
 from Splicing.data.AbstractDataset import AbstractDataset
 

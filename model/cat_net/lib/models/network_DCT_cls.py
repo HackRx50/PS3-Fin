@@ -1,17 +1,3 @@
-# ------------------------------------------------------------------------------
-# Copyright (c) Microsoft
-# Licensed under the MIT License.
-# Written by Bin Xiao (Bin.Xiao@microsoft.com)
-# Modified by Ke Sun (sunk@mail.ustc.edu.cn)
-# ------------------------------------------------------------------------------
-"""
-Modified by Myung-Joon Kwon
-kwon19@kaist.ac.kr
-Aug 22, 2020
-
-This is the DCT Stream for classification.
-This is used for pretraining on double JPEG detection.
-"""
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function

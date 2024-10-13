@@ -1,14 +1,3 @@
-# ------------------------------------------------------------------------------
-# Copyright (c) Microsoft
-# Licensed under the MIT License.
-# Written by Ke Sun (sunk@mail.ustc.edu.cn)
-# ------------------------------------------------------------------------------
-"""
-Modified by Myung-Joon Kwon
-mjkwon2021@gmail.com
-July 14, 2020
-"""
-
 import sys, os
 path = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..')
 if path not in sys.path:

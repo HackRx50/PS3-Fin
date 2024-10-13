@@ -1,10 +1,3 @@
-"""
-Created by Myung-Joon Kwon
-mjkwon2021@gmail.com
-27 Jan 2021
-
-Note: 'compRAISE' is an alias of 'JPEG RAISE' in the paper.
-"""
 import project_config
 from Splicing.data.AbstractDataset import AbstractDataset
 

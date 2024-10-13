@@ -1,8 +1,3 @@
-"""
-Created by Myung-Joon Kwon
-mjkwon2021@gmail.com
-July 7, 2020
-"""
 from abc import ABC, abstractmethod
 from PIL import Image, JpegImagePlugin
 import numpy as np

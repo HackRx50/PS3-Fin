@@ -1,10 +1,3 @@
-"""
-Created by Myung-Joon Kwon
-mjkwon2021@gmail.com
-Aug 4, 2020
-
-This dataset is used for pretraining the DCT stream on double JPEG detection.
-"""
 import project_config
 from Splicing.data import AbstractDataset
 

@@ -1,10 +1,3 @@
-"""
-Created by Myung-Joon Kwon
-mjkwon2021@gmail.com
-July 8, 2020
-"""
-
-
 import torch
 from torch.utils.data import Dataset
 import random
