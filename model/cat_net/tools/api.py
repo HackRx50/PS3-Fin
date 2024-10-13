@@ -253,6 +253,10 @@ def predict():
                 cat = "Authentic"
             return jsonify({'is_forged': is_forged, 'bounding_box': boxes, 'type': cat})
 
+@app.route('/predict/', methods=['GET', 'POST'])
+def predict_route():
+    return predict()
+
 
 
 # driver function 
