@@ -87,7 +87,7 @@ data/
 
 ## Results
 
-<>
+![Sample Results](https://github.com/user-attachments/assets/805c53f0-b9a4-4c3b-8a77-759ae5fd0031)
 
 ## Contributing
 
