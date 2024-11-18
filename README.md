@@ -1,6 +1,6 @@
 # Image Forgery Detection Using Vision Transformer
 
-![Model Architecture](https://github.com/user-attachments/assets/90a6dcf3-5d03-462a-917a-94dd263cd815)
+![Model Architecture](https://github.com/user-attachments/assets/6c15be33-a5d8-4ea0-b995-ed75df00aba5)
 
 This repository implements a model for detecting image forgery using Vision Transformers. It leverages advanced deep learning techniques for robust and accurate detection of manipulated images, ensuring high reliability in image authenticity verification.
 
